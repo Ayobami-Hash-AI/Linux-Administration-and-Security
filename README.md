@@ -11,6 +11,9 @@ A growing portfolio of hands-on Linux exercises documenting **commands, observed
 | ID | Lab | Platform | Evidence status |
 |---|---|---|---|
 | 001 | [File Ownership & Permissions](02-Users-Groups-and-Permissions/LabEx-File-Ownership-and-Permissions/README.md) | LabEx | Commands and outcome documented from shared screenshot; image upload pending |
+| 002 | [Creating a Linux User](02-Users-Groups-and-Permissions/LabEx-User-Creation/README.md) | LabEx | `useradd` and `/etc/passwd` verification documented; screenshot upload pending |
+
+**Lab 002 covers:** `sudo useradd`, `grep`, local account database fields, UID/GID, and verification limits.
 
 **Lab 001 covers:** `touch`, `chown`, `chmod 760`, `ls -l`, Unix permission notation, and least privilege.
 
