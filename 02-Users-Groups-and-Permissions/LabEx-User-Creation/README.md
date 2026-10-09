@@ -3,7 +3,7 @@
 **Platform:** LabEx  
 **Date:** October 9, 2026  
 **Topic:** Linux user administration and account verification  
-**Status:** Account creation, Bob's home-directory permissions, Joker's password update, home-path modification, and Bash shell configuration evidenced.
+**Status:** Account creation, Bob's home-directory permissions, Joker's password update, home-path modification, Bash shell configuration, sudo-group membership, interactive login, and privileged command execution evidenced.
 
 ## Objective
 
@@ -120,7 +120,7 @@ sudo stat /home/bob
 sudo passwd joker
 ```
 
-The terminal reports `passwd: password updated successfully`, confirming a successful password update. Password input is not echoed in the terminal. Interactive login has not yet been demonstrated. The lab's example password is for practice only; use a strong, unique password for real accounts.
+The terminal reports `passwd: password updated successfully`, confirming a successful password update. Password input is not echoed in the terminal. Successful interactive login is evidenced in the sudo-group verification section below. The lab's example password is for practice only; use a strong, unique password for real accounts.
 
 ![Successful password update for joker in the LabEx terminal](screenshots/labex-joker-password-configuration.png)
 
@@ -160,7 +160,7 @@ Observed account record:
 joker:x:5001:5001::/home/wayne:/bin/bash
 ```
 
-The `-s` option changes the configured login shell. The returned entry confirms `/bin/bash`; the home path, UID, and primary GID remain unchanged. This verifies account configuration, not a successful interactive Bash login.
+The `-s` option changes the configured login shell. The returned entry confirms `/bin/bash`; the home path, UID, and primary GID remain unchanged. This screenshot verifies account configuration. A subsequent login session is evidenced below.
 
 ![Terminal verification of joker's login shell as /bin/bash](screenshots/labex-joker-bash-shell-verification.png)
 
@@ -168,8 +168,40 @@ The `-s` option changes the configured login shell. The returned entry confirms 
 
 [LabEx shell instructions](screenshots/labex-user-shell-instructions.png) provide exercise context only.
 
+## Supplementary group membership and privileged access
+
+```bash
+sudo usermod -aG sudo joker
+groups joker
+su - joker
+sudo cat /etc/shadow
+exit
+```
+
+The group query returns:
+
+```text
+joker : joker sudo
+```
+
+- `-G sudo` selects a supplementary group; `-a` appends it without replacing existing supplementary memberships.
+- `groups joker` confirms membership in `joker` and `sudo`.
+- `su - joker` starts a login session as `joker`. The changed prompt confirms the user switch.
+- The privileged read returns protected account data after the sudo password prompt, demonstrating successful sudo execution under the lab's policy.
+- The subsequent screenshot shows `exit` and return to the `labex` prompt.
+
+![LabEx terminal confirming sudo-group membership, login as joker, and privileged command execution](screenshots/labex-joker-sudo-group-login-verification.png)
+
+*Figure 6: Group membership, authenticated user switching, and sudo execution. This image contains no password hashes.*
+
+[LabEx group-management instructions](screenshots/labex-sudo-group-instructions.png) provide exercise context.
+
+**Security interpretation:** Sudo authorization depends on sudoers policy; a group name alone does not universally grant administrative rights. Adding a user to an administrative group is a significant privilege change and should follow least privilege.
+
+**Evidence handling:** The screenshot containing password hashes and the instruction image displaying the lab password are excluded from the public repository. Protected authentication data is not reproduced in this report. For future verification, use `sudo -l` to inspect allowed commands and `sudo id` to demonstrate elevated execution without exposing password records.
+
 ## Next steps
 
-Continue the LabEx user-management exercise, then document group membership, account modification, account locking, and safe account deletion as actually performed.
+Continue the LabEx user-management exercise, then document account locking and safe account deletion as actually performed. Verify the configured home directory exists and inspect sudo policy with non-sensitive commands.
 
 [← Linux portfolio index](../../README.md)
