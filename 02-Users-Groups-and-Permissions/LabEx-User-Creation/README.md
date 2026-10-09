@@ -3,7 +3,7 @@
 **Platform:** LabEx  
 **Date:** October 9, 2026  
 **Topic:** Linux user administration and account verification  
-**Status:** Initial step completed and evidenced; additional account configuration not yet shown.
+**Status:** Account creation and home-directory verification evidenced; further account configuration remains to be demonstrated.
 
 ## Objective
 
@@ -65,7 +65,10 @@ These are **suggested follow-up commands**, not commands shown as completed in t
 ## Evidence
 
 - **Source:** User-shared LabEx screenshot from October 9, 2026 showing the account-creation command and `/etc/passwd` output.
-- **Image file:** Screenshot upload to this GitHub repository is pending; the connected GitHub text-file interface does not accept binary images.
+
+![LabEx terminal showing joker account creation and verification in /etc/passwd](screenshots/labex-user-creation-joker-account-verification.png)
+
+*Figure 1: Creating `joker` and confirming the account record in `/etc/passwd`.*
 - **Limitations:** No evidence yet of home-directory creation, password configuration, group changes, or login testing.
 
 
@@ -104,7 +107,11 @@ getent passwd bob
 sudo stat /home/bob
 ```
 
-**Evidence:** User-shared LabEx screenshot of the `bob` creation and directory listing. The screenshot is available in the conversation but has not been uploaded as a binary file to GitHub through the current connector.
+**Evidence:** LabEx terminal showing `bob` account creation and home-directory verification.
+
+![LabEx terminal showing bob creation with a home directory and verified ownership and permissions](screenshots/labex-user-creation-bob-home-directory-permissions.png)
+
+*Figure 2: Creating `bob` with `useradd -m` and verifying `/home/bob` ownership and mode `750`.*
 
 ## Next steps
 
