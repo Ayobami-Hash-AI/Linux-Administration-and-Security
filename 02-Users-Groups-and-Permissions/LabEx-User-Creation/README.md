@@ -3,7 +3,7 @@
 **Platform:** LabEx  
 **Date:** October 9, 2026  
 **Topic:** Linux user administration and account verification  
-**Status:** Account creation, Bob's home-directory permissions, Joker's password update, home-path modification, Bash shell configuration, sudo-group membership, interactive login, and privileged command execution evidenced.
+**Status:** Account creation, Bob's home-directory permissions, Joker's password update, home-path modification, Bash shell configuration, sudo-group membership, interactive login, privileged command execution, and password lock/unlock testing evidenced.
 
 ## Objective
 
@@ -200,8 +200,40 @@ joker : joker sudo
 
 **Evidence handling:** The screenshot containing password hashes and the instruction image displaying the lab password are excluded from the public repository. Protected authentication data is not reproduced in this report. For future verification, use `sudo -l` to inspect allowed commands and `sudo id` to demonstrate elevated execution without exposing password records.
 
+## Password locking and unlocking
+
+The terminal demonstrates the following sequence:
+
+```bash
+sudo passwd -l joker
+su - joker
+sudo passwd -u jokerr
+sudo passwd -u joker
+su - joker
+```
+
+| Action | Observed result |
+|---|---|
+| Lock `joker` with `passwd -l` | `passwd: password expiry information changed.` |
+| Attempt `su - joker` while locked | `su: Authentication failure` |
+| Attempt unlock with mistyped `jokerr` | `passwd: user 'jokerr' does not exist` |
+| Correct username and run `passwd -u joker` | `passwd: password expiry information changed.` |
+| Retry `su - joker` | Login succeeds and the prompt changes to `joker` |
+
+![LabEx terminal showing password locking, failed authentication, corrected username, unlocking, and successful login](screenshots/labex-joker-password-lock-unlock-verification.png)
+
+*Figure 7: Password lock-and-unlock behavior verified by login attempts.*
+
+[LabEx password-locking instructions](screenshots/labex-password-locking-instructions.png) provide exercise context.
+
+**Troubleshooting:** The failed unlock targeted a nonexistent account (`jokerr`). Correcting the username resolved that command error.
+
+**Security interpretation:** `passwd -l` locks password authentication; it does not necessarily disable all access to an account. SSH keys, other authentication mechanisms, and existing sessions may remain usable. `passwd -u` unlocks the password. This exercise demonstrates the observed password-based `su` behavior, not complete account suspension.
+
+**Suggested follow-up (not yet evidenced):** Use `sudo passwd -S joker` to inspect password status without displaying hashes.
+
 ## Next steps
 
-Continue the LabEx user-management exercise, then document account locking and safe account deletion as actually performed. Verify the configured home directory exists and inspect sudo policy with non-sensitive commands.
+Continue the LabEx user-management exercise, then document safe account deletion as actually performed. Verify the configured home directory exists and inspect sudo policy with non-sensitive commands.
 
 [← Linux portfolio index](../../README.md)
