@@ -3,11 +3,11 @@
 **Platform:** LabEx  
 **Date:** October 9, 2026  
 **Topic:** Linux user administration and account verification  
-**Status:** Account creation and home-directory verification evidenced; further account configuration remains to be demonstrated.
+**Status:** Account creation, Bob's home-directory permissions, Joker's password update, home-path modification, and Bash shell configuration evidenced.
 
 ## Objective
 
-Create a local Linux account named `joker` and verify that the system registered the account.
+Create and verify local Linux accounts, configure a password, modify a home-directory path, and change a login shell.
 
 ## Environment
 
@@ -45,7 +45,7 @@ joker:x:5001:5001::/home/joker:/bin/sh
 | Home path | `/home/joker` | Configured home directory path |
 | Login shell | `/bin/sh` | Configured shell |
 
-**Important distinction:** A home directory path appearing in `/etc/passwd` does **not** prove that the directory exists. The screenshot also does not demonstrate that a password was set or that an interactive login succeeds.
+**Important distinction:** A home directory path appearing in `/etc/passwd` does **not** prove that the directory exists. The initial screenshot does not demonstrate password configuration or interactive login; the password update is evidenced later in this report.
 
 ## Security significance
 
@@ -56,7 +56,7 @@ Local accounts are security principals. Their UIDs, group memberships, authentic
 ```bash
 id joker
 getent passwd joker
-ls -ld /home/joker
+ls -ld /home/wayne
 sudo passwd -S joker
 ```
 
@@ -69,7 +69,8 @@ These are **suggested follow-up commands**, not commands shown as completed in t
 ![LabEx terminal showing joker account creation and verification in /etc/passwd](screenshots/labex-user-creation-joker-account-verification.png)
 
 *Figure 1: Creating `joker` and confirming the account record in `/etc/passwd`.*
-- **Limitations:** No evidence yet of home-directory creation, password configuration, group changes, or login testing.
+
+**Initial evidence scope:** Account record creation only. Subsequent evidence below covers Bob's home directory and Joker's password and account-property changes.
 
 
 ## Progress update — creating a user with a home directory
@@ -112,6 +113,60 @@ sudo stat /home/bob
 ![LabEx terminal showing bob creation with a home directory and verified ownership and permissions](screenshots/labex-user-creation-bob-home-directory-permissions.png)
 
 *Figure 2: Creating `bob` with `useradd -m` and verifying `/home/bob` ownership and mode `750`.*
+
+## Password configuration
+
+```bash
+sudo passwd joker
+```
+
+The terminal reports `passwd: password updated successfully`, confirming a successful password update. Password input is not echoed in the terminal. Interactive login has not yet been demonstrated. The lab's example password is for practice only; use a strong, unique password for real accounts.
+
+![Successful password update for joker in the LabEx terminal](screenshots/labex-joker-password-configuration.png)
+
+*Figure 3: Successful password configuration for `joker`.*
+
+## Modifying the configured home path
+
+```bash
+sudo usermod -d /home/wayne joker
+sudo grep -w joker /etc/passwd
+```
+
+Observed account record:
+
+```text
+joker:x:5001:5001::/home/wayne:/bin/sh
+```
+
+The `-d` option changes the account's configured home path. The returned record confirms `/home/wayne`. This command does not create the directory or move its contents; those operations are not evidenced here. UID and primary GID remain `5001`.
+
+![Terminal verification of joker's configured home path as /home/wayne](screenshots/labex-joker-home-path-verification.png)
+
+*Figure 4: Home-path modification verified in the account database.*
+
+[LabEx user-properties instructions](screenshots/labex-user-properties-instructions.png) provide exercise context only.
+
+## Changing the login shell
+
+```bash
+sudo usermod -s /bin/bash joker
+sudo grep -w joker /etc/passwd
+```
+
+Observed account record:
+
+```text
+joker:x:5001:5001::/home/wayne:/bin/bash
+```
+
+The `-s` option changes the configured login shell. The returned entry confirms `/bin/bash`; the home path, UID, and primary GID remain unchanged. This verifies account configuration, not a successful interactive Bash login.
+
+![Terminal verification of joker's login shell as /bin/bash](screenshots/labex-joker-bash-shell-verification.png)
+
+*Figure 5: Bash login-shell configuration verified in the account database.*
+
+[LabEx shell instructions](screenshots/labex-user-shell-instructions.png) provide exercise context only.
 
 ## Next steps
 
