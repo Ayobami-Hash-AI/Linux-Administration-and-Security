@@ -1,38 +1,35 @@
-# Linux Administration & Security — Hands-on Portfolio
+# Linux Administration & Security | Hands-on Labs
 
-**Ayobami Odulaja** | Cybersecurity Analyst | Healthcare Cybersecurity Focus
+**Ayobami Odulaja** · Linux fundamentals · System administration · Security operations
 
-This repository documents my practical Linux learning, from command-line fundamentals to administration, hardening, investigation, and security operations. Each project aims to show **what I did, how I verified it, what I learned, and why it matters**.
+A growing portfolio of hands-on Linux exercises documenting **commands, observed results, security implications, and lessons learned**. These foundational skills apply to enterprise infrastructure, cloud platforms, security operations, and many other technical environments.
 
-## Projects
+[Cybersecurity Portfolio](https://github.com/Ayobami-Hash-AI/Cybersecurity-Portfolio-Ayobami-Odulaja) · [Python Projects](https://github.com/Ayobami-Hash-AI/Python) · [Development Journal](https://github.com/Ayobami-Hash-AI/Project-Letter) · [LinkedIn](https://www.linkedin.com/in/ayobami-o-077004152)
 
-| # | Project | Platform | Skills |
+## Published labs
+
+| ID | Lab | Platform | Evidence status |
 |---|---|---|---|
-| 001 | [Linux File Ownership and Permissions](02-Users-Groups-and-Permissions/LabEx-File-Ownership-and-Permissions/README.md) | LabEx | `touch`, `chown`, `chmod`, `ls -l`, least privilege |
+| 001 | [File Ownership & Permissions](02-Users-Groups-and-Permissions/LabEx-File-Ownership-and-Permissions/README.md) | LabEx | Commands and outcome documented from shared screenshot; image upload pending |
 
-## Learning roadmap
+**Lab 001 covers:** `touch`, `chown`, `chmod 760`, `ls -l`, Unix permission notation, and least privilege.
 
-1. Linux fundamentals and file operations
-2. Users, groups, and permissions
-3. Processes and services
-4. Linux networking
-5. Security hardening and SSH
-6. Logs, audit trails, and forensics
-7. Bash scripting and automation
-8. Integrated Linux security investigations
+## Learning progression
 
-## Documentation standard
+| Stage | Topics | Status |
+|---|---|---|
+| Foundations | File operations, users, groups, permissions | In progress |
+| Administration | Processes, services, package management, networking | Planned |
+| Defensive operations | Logs, SSH security, host hardening, auditing | Planned |
+| Automation | Bash scripting, repeatable administration tasks | Planned |
+| Investigations | Linux telemetry and incident-response workflows | Planned |
 
-Each lab is documented with its objective, environment, **observed** commands and output, interpretation, security relevance, healthcare application, evidence, limitations, and next steps. Screenshots are added only when available and checked for sensitive data before publication. Planned exercises are clearly separated from completed work.
+## Documentation approach
 
-## Healthcare cybersecurity direction
+Each project records the objective, environment, observed commands, verification evidence, interpretation, challenges, security relevance, and next steps. **Planned work is not presented as completed work.** Screenshots will be published only when available and reviewed for sensitive information.
 
-My clinical experience informs a long-term goal of securing healthcare systems, clinical applications, patient data, and service availability. Linux administration and security are foundational skills for protecting servers and infrastructure supporting care delivery.
+## Professional relevance
 
-## Related work
+Linux expertise supports SOC investigation, cloud administration, system hardening, automation, and infrastructure security. My longer-term interest includes protecting healthcare systems, but these labs intentionally demonstrate **industry-wide technical capabilities**.
 
-- [Cybersecurity Portfolio](https://github.com/Ayobami-Hash-AI/Cybersecurity-Portfolio-Ayobami-Odulaja)
-- [Python Projects](https://github.com/Ayobami-Hash-AI/Python)
-- [Professional Development Journal](https://github.com/Ayobami-Hash-AI/Project-Letter)
-
-> **Ethical use:** Exercises are intended for authorized learning environments. No unauthorized systems are targeted.
+> Authorized educational environments only.
