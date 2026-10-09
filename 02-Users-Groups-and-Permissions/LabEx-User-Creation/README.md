@@ -1,13 +1,13 @@
-# Lab 002 — Creating and Verifying a Linux User Account
+# Lab 002 — Linux User Account Lifecycle and Access Management
 
 **Platform:** LabEx  
 **Date:** October 9, 2026  
 **Topic:** Linux user administration and account verification  
-**Status:** Account creation, Bob's home-directory permissions, Joker's password update, home-path modification, Bash shell configuration, sudo-group membership, interactive login, privileged command execution, and password lock/unlock testing evidenced.
+**Status:** Account creation, Bob's home-directory permissions, Joker's password update, home-path modification, Bash shell configuration, sudo-group membership, interactive login, privileged command execution, password lock/unlock testing, and Bob's account and home-directory removal evidenced.
 
 ## Objective
 
-Create and verify local Linux accounts, configure a password, modify a home-directory path, and change a login shell.
+Create and verify local Linux accounts, configure a password, modify a home-directory path, change a login shell, manage administrative group membership, test password locking, and remove a lab account with verification.
 
 ## Environment
 
@@ -232,8 +232,49 @@ su - joker
 
 **Suggested follow-up (not yet evidenced):** Use `sudo passwd -S joker` to inspect password status without displaying hashes.
 
+## Deleting a lab user and verifying removal
+
+```bash
+sudo userdel -r bob
+sudo grep -w bob /etc/passwd
+sudo ls -ld /home/bob
+```
+
+Observed deletion message:
+
+```text
+userdel: bob mail spool (/var/mail/bob) not found
+```
+
+The account query produces no matching output, and the directory check returns:
+
+```text
+ls: cannot access '/home/bob': No such file or directory
+```
+
+These checks confirm that Bob's local account entry is absent from `/etc/passwd` and `/home/bob` no longer exists. The missing mail-spool message reports an absent `/var/mail/bob`; it did not prevent the observed account and home-directory removal. The command's exit status was not captured.
+
+![LabEx terminal showing bob deletion, absent account entry, and removed home directory](screenshots/labex-bob-account-home-removal-verification.png)
+
+*Figure 8: Local account and home-directory removal verified after `userdel -r`.*
+
+[LabEx user-deletion instructions](screenshots/labex-user-deletion-instructions.png) provide exercise context.
+
+**Security interpretation:** `userdel -r` removes the account and requests removal of its home directory and mail spool. It does not guarantee removal of files owned by the user's numeric UID elsewhere, termination of all sessions, or revocation of external access. Real offboarding requires those additional checks and appropriate data-retention decisions.
+
+## Demonstrated skills
+
+- Local account creation and account-database verification.
+- Home-directory creation, ownership, and permission inspection.
+- Password configuration, home-path changes, and login-shell changes.
+- Supplementary group management and verification of sudo execution.
+- Password locking and unlocking with observed authentication outcomes.
+- Account removal and verification of home-directory deletion.
+- Troubleshooting username errors and interpreting cleanup messages.
+- Public evidence handling that excludes password hashes.
+
 ## Next steps
 
-Continue the LabEx user-management exercise, then document safe account deletion as actually performed. Verify the configured home directory exists and inspect sudo policy with non-sensitive commands.
+Verify Joker's configured home directory exists, inspect sudo policy with non-sensitive commands, and practise least-privilege group configuration. Capture additional checks before claiming full account offboarding or completion of the entire LabEx course.
 
 [← Linux portfolio index](../../README.md)
