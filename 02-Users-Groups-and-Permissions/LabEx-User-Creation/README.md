@@ -68,6 +68,44 @@ These are **suggested follow-up commands**, not commands shown as completed in t
 - **Image file:** Screenshot upload to this GitHub repository is pending; the connected GitHub text-file interface does not accept binary images.
 - **Limitations:** No evidence yet of home-directory creation, password configuration, group changes, or login testing.
 
+
+## Progress update — creating a user with a home directory
+
+A subsequent LabEx screenshot shows the following commands:
+
+```bash
+sudo useradd -m bob
+sudo ls -ld /home/bob
+```
+
+Observed output:
+
+```text
+drwxr-x--- 2 bob bob 57 Oct 10 06:44 /home/bob
+```
+
+**What this establishes:** The `-m` option requested creation of a home directory for the new account. The `ls -ld` result confirms that `/home/bob` exists as a directory, is owned by user `bob` and group `bob`, and has permission mode `750` (`rwxr-x---`). The listing shows link count `2` and directory size `57` bytes in this environment. The date/time in the terminal is the lab environment's timestamp, not necessarily the user's local time.
+
+**Permissions interpretation:**
+
+| Identity | Permissions | Meaning |
+|---|---|---|
+| Owner `bob` | `rwx` | List, create/remove entries (subject to other controls), traverse |
+| Group `bob` | `r-x` | List and traverse, but not modify directory entries |
+| Others | `---` | No access via ordinary Unix mode bits |
+
+**Security relevance:** Creating an account with a home directory and restricting directory access are foundational to user isolation and least privilege. `sudo ls -ld` checks directory metadata; it does not test Bob's password, interactive login, or access to files inside the directory.
+
+**Next verification (not yet shown as executed):**
+
+```bash
+id bob
+getent passwd bob
+sudo stat /home/bob
+```
+
+**Evidence:** User-shared LabEx screenshot of the `bob` creation and directory listing. The screenshot is available in the conversation but has not been uploaded as a binary file to GitHub through the current connector.
+
 ## Next steps
 
 Continue the LabEx user-management exercise, then document group membership, account modification, account locking, and safe account deletion as actually performed.
