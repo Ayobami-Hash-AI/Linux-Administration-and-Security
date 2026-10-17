@@ -98,4 +98,33 @@ Three lines are visible in the report:
 
 **Investigation lesson:** Keyword filtering produces candidates for review. Read surrounding messages and correlate symptoms before concluding that an application issue is caused by a kernel or hardware problem. No remediation or confirmed root cause is evidenced here.
 
+## Examining Nginx configuration and appending evidence
+
+I searched the lab's Nginx configuration for `worker_processes` and redirected the matching lines to the end of the existing error report.
+
+```bash
+sudo grep "worker_processes" ~/project/config/nginx.conf >> ~/project/error_report.txt
+```
+
+**Command interpretation:** `grep` selects lines containing the text `worker_processes`. The `>>` operator appends output, preserving existing report contents; `>` would overwrite them. The shell performs the redirection as the current user even though `grep` runs under `sudo`.
+
+The terminal returns to the prompt without a visible error. Because output is redirected and the report is not displayed, the screenshot does not establish whether a line matched, the directive's configured value, or what was appended. A simple text search can also match commented lines.
+
+![LabEx task to locate worker_processes and append the line to the report](screenshots/labex-nginx-worker-processes-task.png)
+
+*Figure 5: Configuration-review and report-append requirement.*
+
+![Terminal showing grep for worker_processes with append redirection](screenshots/labex-nginx-directive-report-append-command.png)
+
+*Figure 6: Nginx configuration search and append command.*
+
+**Verification to perform next (not yet evidenced):**
+
+```bash
+grep "worker_processes" ~/project/config/nginx.conf
+tail -n 10 ~/project/error_report.txt
+```
+
+**Investigation limits:** The task narrative suggests investigating worker-process configuration. The screenshots do not establish that too few workers caused a bottleneck, that hardware faults have been ruled out, or that this lab configuration is the running server's active configuration. No configuration change, reload, or performance test has been demonstrated.
+
 [← Linux portfolio index](../../README.md)
