@@ -162,4 +162,32 @@ In normal `diff` output, `<` marks lines from the first file (staging), `>` mark
 
 **Command behavior:** `diff` normally returns `0` for identical files, `1` for differences, and a value greater than `1` for an error. Differences are an expected result of a comparison.
 
+## Comparing simulated server directory trees
+
+I compared `server1_files` (staging) and `server2_files` (production) recursively and redirected the complete comparison output into a report.
+
+```bash
+diff -r ~/project/server1_files ~/project/server2_files > ~/project/missing_files.txt
+```
+
+The `-r` option makes `diff` descend into subdirectories. It can report files present in only one tree and content differences between corresponding files. The command preserves the full comparison output rather than filtering it.
+
+The screenshot shows the command returning to the prompt without a visible error. The report has not yet been displayed, so no particular missing file, directory difference, or failed deployment is established by this evidence.
+
+![LabEx task to compare simulated staging and production directory trees](screenshots/labex-server-directory-consistency-task.png)
+
+*Figure 8: Recursive directory comparison and report requirement.*
+
+**Evidence handling:** The accompanying terminal screenshot includes API-key values from the previous configuration comparison and is excluded from the public repository. The directory comparison command is transcribed above without those values.
+
+**Verification to perform next (not yet evidenced):**
+
+```bash
+cat ~/project/missing_files.txt
+```
+
+Lines beginning `Only in` identify entries unique to the named directory. Entries unique to `server1_files` are candidates for files absent from the simulated production tree. Review the entire report before deciding whether differences are expected or indicate a deployment problem.
+
+**Lesson learned:** Recursive flags are command-specific: `diff -r` compares directory trees and `cp -r` copies them; `mv` does not require a recursive flag.
+
 [← Linux portfolio index](../../README.md)
