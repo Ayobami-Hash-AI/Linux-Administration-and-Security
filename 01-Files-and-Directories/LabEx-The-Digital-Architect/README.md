@@ -2,7 +2,7 @@
 
 **Platform:** LabEx · The Digital Architect  
 **Date:** October 16, 2026  
-**Status:** Directory creation and file-move commands evidenced; project-root listing verified. Destination contents have not yet been listed.
+**Status:** Directory creation, file-move commands, and configuration backup creation evidenced. Configuration-directory listing verified; source and documentation destination contents remain to be listed.
 
 ## Objective
 
@@ -84,7 +84,7 @@ config/  docs/  src/
 | `config.json` | `config/config.json` |
 | `README.md` | `docs/README.md` |
 
-The terminal shows no errors from the three `mv` commands, and the files no longer appear in the root listing. A listing inside each destination is still needed for direct confirmation of its contents.
+The terminal shows no errors from the three `mv` commands, and the files no longer appear in the root listing. A later screenshot below confirms `config.json` in the configuration directory. Listings inside `src/` and `docs/` are still needed for direct confirmation of their contents.
 
 ![LabEx instructions for moving project files to designated directories](screenshots/labex-project-file-organization-task.png)
 
@@ -103,6 +103,41 @@ ls -l src/ config/ docs/
 ```
 
 This exercise follows the LabEx requirement to place `README.md` in `docs/`. The GitHub lab report remains in this project's root so visitors can read it directly.
+
+## Creating a configuration backup
+
+From the `config` directory, I copied `config.json` to `config.json.bak` and listed the directory to verify that both filenames were present.
+
+```bash
+cp config.json config.json.bak
+ls
+```
+
+Observed output:
+
+```text
+config.json  config.json.bak
+```
+
+The listing confirms the original configuration file and a backup-named file exist together. The `cp` command shows no error. This screenshot does not demonstrate a byte-for-byte comparison, restore test, or an independent backup location.
+
+![LabEx task requesting a backup copy of config.json](screenshots/labex-config-backup-task.png)
+
+*Figure 6: Configuration backup requirement.*
+
+![Terminal showing cp config.json config.json.bak and both filenames in the directory listing](screenshots/labex-config-backup-file-verification.png)
+
+*Figure 7: Configuration copy and filename verification.*
+
+**Lesson learned:** `cp` copies a file while leaving the original in place; `mv` relocates or renames it. The `.bak` suffix is a naming convention, not an automatic backup mechanism. A copy in the same directory can support rollback from an edit, but shares the original's storage-failure risk.
+
+**Optional content verification (not yet evidenced):**
+
+```bash
+cmp config.json config.json.bak
+```
+
+For identical files, `cmp` produces no output and returns exit status `0`.
 
 ## Next step
 
