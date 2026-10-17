@@ -178,6 +178,67 @@ The corrected move shows no error, and the listing confirms `shared_docs` and `R
 ls -la ~/project/phoenix_project/docs/shared_docs/
 ```
 
+## Archiving and removing older logs
+
+I navigated to `~/project/logs`, inspected the filenames, created a gzip-compressed tar archive from files matching the 2023 naming pattern, and removed the matching originals.
+
+```bash
+cd logs
+ls
+tar czf old_logs.tar.gz *_2023-*.log
+ls
+rm *_2023-*.log
+ls
+```
+
+The initial listing shows:
+
+```text
+app_2023-01-15.log  app_2024-05-01.log  db_2023-02-20.log
+```
+
+The listing after archive creation includes `old_logs.tar.gz` alongside the original files. The final listing shows:
+
+```text
+app_2024-05-01.log  old_logs.tar.gz
+```
+
+This confirms the archive filename exists, the two matching 2023 log filenames are absent from the final listing, and the 2024 log remains. The screenshot shows no command errors, but does not show archive-member inspection, integrity checks, or a restore test.
+
+| Component | Meaning |
+|---|---|
+| `tar` | Archive utility |
+| `c` | Create an archive |
+| `z` | Compress with gzip |
+| `f` | Use the following archive filename |
+| `*_2023-*.log` | Shell pattern matching filenames containing `_2023-` and ending in `.log` |
+| `rm` | Remove the matching original files |
+
+The filename pattern selects by name, not by filesystem timestamps or log contents.
+
+![LabEx section heading for archiving outdated logs](screenshots/labex-log-archiving-section.png)
+
+*Figure 10: Log-archiving exercise context.*
+
+![LabEx task to archive 2023 logs and remove their originals](screenshots/labex-log-archive-cleanup-task.png)
+
+*Figure 11: Compressed archive and cleanup requirements.*
+
+![Terminal showing 2023 log archive creation and final listing retaining the archive and 2024 log](screenshots/labex-2023-log-archive-cleanup-verification.png)
+
+*Figure 12: Archive creation and removal of matching original log files.*
+
+**Operational lesson:** Before removing original logs in a real workflow, inspect the archive and verify recoverability. Log-retention requirements and investigation needs should guide cleanup.
+
+**Suggested verification (not yet evidenced):**
+
+```bash
+tar -tzf old_logs.tar.gz
+gzip -t old_logs.tar.gz
+```
+
+The first command lists archive members; the second tests gzip integrity. Neither alone proves that a full restore succeeds.
+
 ## Next step
 
 Continue the next LabEx task and capture its commands and verification before marking additional work complete.
