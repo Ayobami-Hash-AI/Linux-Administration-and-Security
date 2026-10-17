@@ -1,8 +1,8 @@
-# Lab 004 — Application Log Filtering and Error Reporting
+# Lab 004 — Application and Kernel Log Investigation
 
 **Platform:** LabEx  
 **Date:** October 17, 2026  
-**Status:** Filtering command evidenced; report contents and match count not yet inspected.
+**Status:** Application filtering command evidenced; kernel report contents verified. Application report contents remain uninspected.
 
 ## Objective
 
@@ -61,5 +61,41 @@ These checks are suggested, not yet evidenced. Review report contents before pub
 ## Security relevance
 
 Filtering logs reduces investigation noise and helps isolate application failures. An `ERROR` label alone does not establish malicious activity; assess timestamps, surrounding events, affected services, and other telemetry.
+
+## Investigating kernel boot messages
+
+I filtered the kernel ring buffer for case-insensitive matches to `fail` or `error`, saved the results, and displayed the report.
+
+```bash
+sudo dmesg | grep -i -E 'fail|error' > ~/project/boot_issues.txt
+cat ~/project/boot_issues.txt
+```
+
+| Component | Meaning |
+|---|---|
+| `sudo dmesg` | Read kernel ring-buffer messages with elevated privileges |
+| `\|` | Send the first command's standard output to the next command |
+| `grep -i` | Match without case sensitivity |
+| `-E 'fail\|error'` | Use extended regular expressions; match either alternative |
+| `>` | Save matching lines to the report, overwriting any prior contents |
+| `cat` | Display the saved report |
+
+Three lines are visible in the report:
+
+1. An ACPI message states that MMCFG information could not be added and extended PCI configuration space could not be accessed under a bridge.
+2. `RAS: Correctable Errors collector initialized.`
+3. A `my-driver` probe for `0000:00:1f.0` failed with `error -2`.
+
+**Interpretation:** The RAS initialization line is a keyword match, not evidence by itself of a current failure. The ACPI and driver messages warrant investigation, but the screenshot does not establish their cause, severity, or connection to the application errors. Kernel output can include events after boot as well as boot-time messages.
+
+![LabEx task to search kernel messages for fail or error](screenshots/labex-kernel-boot-investigation-task.png)
+
+*Figure 3: Kernel-message investigation requirement.*
+
+![Terminal showing dmesg filtering and three saved report lines](screenshots/labex-dmesg-boot-issues-report-verification.png)
+
+*Figure 4: Saved kernel report inspected using cat.*
+
+**Investigation lesson:** Keyword filtering produces candidates for review. Read surrounding messages and correlate symptoms before concluding that an application issue is caused by a kernel or hardware problem. No remediation or confirmed root cause is evidenced here.
 
 [← Linux portfolio index](../../README.md)
