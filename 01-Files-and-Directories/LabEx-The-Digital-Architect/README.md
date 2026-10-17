@@ -2,7 +2,7 @@
 
 **Platform:** LabEx · The Digital Architect  
 **Date:** October 16, 2026  
-**Status:** Directory creation, file-move commands, and configuration backup creation evidenced. Configuration-directory listing verified; source and documentation destination contents remain to be listed.
+**Status:** Directory creation, file-move commands, and configuration backup creation evidenced. Configuration-directory listing verified; source destination contents remain to be listed. A later step verifies the documentation directory contains `README.md` and `shared_docs`.
 
 ## Objective
 
@@ -138,6 +138,45 @@ cmp config.json config.json.bak
 ```
 
 For identical files, `cmp` produces no output and returns exit status `0`.
+
+## Moving an entire directory
+
+From `~/project`, I moved `shared_docs` into the project's `docs` directory. My first two attempts used `-r` and `-R`; both failed because `mv` does not support those options. I removed the flag and verified the destination listing.
+
+```bash
+mv shared_docs -r ~/project/phoenix_project/docs/
+# mv: invalid option -- 'r'
+
+mv shared_docs -R ~/project/phoenix_project/docs/
+# mv: invalid option -- 'R'
+
+mv shared_docs ~/project/phoenix_project/docs/
+ls ~/project/phoenix_project/docs/
+```
+
+Observed listing:
+
+```text
+README.md  shared_docs
+```
+
+The corrected move shows no error, and the listing confirms `shared_docs` and `README.md` are present in `docs`. Individual files inside `shared_docs` were not listed, so their contents have not been independently verified.
+
+![LabEx task to move shared_docs into the project documentation directory](screenshots/labex-shared-docs-move-task.png)
+
+*Figure 8: Directory-move requirement.*
+
+![Terminal showing rejected recursive flags, corrected mv command, and destination listing](screenshots/labex-shared-docs-move-troubleshooting-verification.png)
+
+*Figure 9: Troubleshooting unsupported flags and verifying the destination.*
+
+**Lesson learned:** `mv` moves directories with their contents without a recursive flag. `cp -r` is used to copy a directory recursively; that option does not transfer to `mv`.
+
+**Suggested follow-up (not yet evidenced):**
+
+```bash
+ls -la ~/project/phoenix_project/docs/shared_docs/
+```
 
 ## Next step
 
