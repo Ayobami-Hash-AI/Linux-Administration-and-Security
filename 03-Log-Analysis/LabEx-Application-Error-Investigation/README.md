@@ -127,4 +127,39 @@ tail -n 10 ~/project/error_report.txt
 
 **Investigation limits:** The task narrative suggests investigating worker-process configuration. The screenshots do not establish that too few workers caused a bottleneck, that hardware faults have been ruled out, or that this lab configuration is the running server's active configuration. No configuration change, reload, or performance test has been demonstrated.
 
+## Comparing staging and production configuration
+
+I compared the two application configuration files, corrected an unnecessary pipeline, saved the differences, and displayed the saved report.
+
+```bash
+diff ~/project/config/staging/app.conf ~/project/config/production/app.conf
+# An attempted "| grep > report" pipeline produced grep usage output.
+sudo diff ~/project/config/staging/app.conf ~/project/config/production/app.conf > ~/project/config_diff.txt
+cat ~/project/config_diff.txt
+```
+
+The report displays `1,5c1,5`: lines 1–5 of the first file differ from lines 1–5 of the second file.
+
+| Setting | Staging | Production |
+|---|---|---|
+| Environment comment | Staging | Production |
+| Database host | `staging-db` | `prod-db` |
+| API key | Value omitted | Different value; omitted |
+| `feature.flag.new_dashboard` | `true` | `false` |
+| `timeout.ms` | `3000` | `5000` |
+
+In normal `diff` output, `<` marks lines from the first file (staging), `>` marks lines from the second file (production), and `---` separates the two blocks. The saved report contents are evidenced by the subsequent `cat` output.
+
+**Troubleshooting:** `grep` requires a pattern. Piping to bare `grep` caused the usage error; adding `sudo` did not fix the syntax. Direct output redirection from `diff` resolved the reporting task. When readable files are compared, elevated privileges are unnecessary.
+
+![LabEx task to compare staging and production configuration and save the differences](screenshots/labex-staging-production-comparison-task.png)
+
+*Figure 7: Configuration comparison and report requirement.*
+
+**Evidence handling:** The terminal screenshot contains API-key values and is excluded from the public repository. The table above records the relevant differences without reproducing keys.
+
+**Interpretation:** Environment-specific database endpoints and keys may be intentional. The feature flag and timeout differ, but the comparison alone does not prove which setting caused the application issue. No configuration change or root-cause validation is evidenced.
+
+**Command behavior:** `diff` normally returns `0` for identical files, `1` for differences, and a value greater than `1` for an error. Differences are an expected result of a comparison.
+
 [← Linux portfolio index](../../README.md)
