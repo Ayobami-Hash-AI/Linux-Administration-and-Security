@@ -12,7 +12,6 @@ A growing portfolio of hands-on Linux exercises documenting **commands, observed
 |---|---|---|---|
 | 001 | [File Ownership & Permissions](02-Users-Groups-and-Permissions/LabEx-File-Ownership-and-Permissions/README.md) | LabEx | Commands and outcome documented from shared screenshot; image upload pending |
 | 002 | [Linux User Account Lifecycle & Access Management](02-Users-Groups-and-Permissions/LabEx-User-Creation/README.md) | LabEx | Account lifecycle, sudo access, password locking, and deletion documented with screenshots |
-
 | 003 | [Project Directory Structure](01-Files-and-Directories/LabEx-The-Digital-Architect/README.md) | LabEx | Directory creation, naming correction, and final listing verified with screenshots |
 
 **Lab 003 covers:** `cd`, `mkdir`, `rmdir`, `ls -F`, and exact directory naming.
