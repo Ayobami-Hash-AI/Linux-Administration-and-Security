@@ -364,4 +364,31 @@ This confirms a successful password update. Password input was not echoed and no
 
 *Successful password update without exposing credentials.*
 
+## Adding Brenda to the developers group
+
+I appended `developers` to Brenda's supplementary groups and verified the result:
+
+```bash
+sudo usermod -aG developers b.smith
+groups b.smith
+```
+
+Observed output:
+
+```text
+b.smith : b.smith developers
+```
+
+This confirms the account is listed in both its own group and `developers`. The `-a` option appends membership, while `-G` specifies supplementary groups; omitting `-a` can replace existing supplementary memberships.
+
+![LabEx task to add b.smith to developers](screenshots/labex-developers-group-task.jpg)
+
+*Developer group-membership requirement.*
+
+![Terminal confirming b.smith belongs to b.smith and developers](screenshots/labex-b-smith-developers-group-verification.jpg)
+
+*Supplementary group membership verified.*
+
+**Access implications:** Existing sessions may need a fresh login to pick up the new membership. Membership alone does not demonstrate successful project access; directory traversal and file permissions also apply. No login or project-access test is shown in this step.
+
 [← Linux portfolio index](../../README.md)
