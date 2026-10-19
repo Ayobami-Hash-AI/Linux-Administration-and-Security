@@ -118,4 +118,43 @@ The `640` documentation mode grants the owner read/write and the project group r
 
 **Evidence:** User-shared task and recursive terminal listings. Screenshot binaries were not available for upload in this update.
 
+## Enabling collaborative group inheritance with setgid
+
+I applied setgid and collaborative directory permissions to `src`:
+
+```bash
+sudo chmod 2770 ~/project/phoenix_project/src
+ls -l
+```
+
+The listing shows:
+
+```text
+drwxrws--- 2 dev_lead developers 6 Oct 19 14:36 src
+```
+
+| Mode digit | Meaning |
+|---|---|
+| `2` | Setgid |
+| `7` | Owner read, write, and traverse |
+| `7` | Group read, write, and traverse |
+| `0` | No permissions for others |
+
+The lowercase `s` in the group execute position indicates both setgid and group execute permission. On this directory, setgid causes new files and subdirectories to inherit the directory's group (`developers`); new subdirectories also inherit setgid.
+
+**Scope:** Setgid controls group inheritance, not guaranteed group write permissions for new files. Creation mode, umask, and any default ACLs determine those permissions. The screenshot verifies the directory mode but does not demonstrate a new-file inheritance test.
+
+Compared with the previous `750` mode, `2770` also grants group write access, allowing authorized developers to create and remove directory entries subject to other controls. The parent directory's group traverse permission allows the group to reach `src`.
+
+**Outstanding confidentiality correction:** This screenshot still shows `project_keys.txt` as `-rwxr-x---`. The earlier recommended `chmod 600` correction is not yet evidenced. Group read access to the key file remains an observed issue.
+
+**Suggested next verification (not yet executed in the evidence):**
+
+```bash
+sudo chmod 600 ~/project/phoenix_project/project_keys.txt
+ls -l ~/project/phoenix_project/project_keys.txt
+```
+
+**Evidence:** User-shared task and terminal listing; screenshot binaries were not available for upload in this update.
+
 [← Linux portfolio index](../../README.md)
