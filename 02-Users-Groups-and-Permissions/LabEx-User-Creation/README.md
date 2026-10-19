@@ -314,4 +314,30 @@ uid=5002(b.smith) gid=5004(b.smith) groups=5004(b.smith)
 
 **Evidence:** User-shared LabEx onboarding task and terminal screenshot. Screenshot binaries were not available for upload in this update.
 
+## Creating Brenda's home directory
+
+In the disposable onboarding lab, I removed the newly created account and recreated it with `-m` to request a home directory:
+
+```bash
+sudo userdel b.smith
+sudo useradd -m b.smith
+ls -ld
+ls -l
+ls -la /home/
+```
+
+The final listing confirms `/home/b.smith` exists, is owned by `b.smith:b.smith`, and has mode `750` (`drwxr-x---`).
+
+![LabEx task requiring a dedicated home directory for the developer](screenshots/labex-developer-home-directory-task.jpg)
+
+*Developer onboarding: dedicated home-directory requirement.*
+
+![Terminal showing initial b.smith identity, recreation with useradd -m, and verified home-directory ownership](screenshots/labex-b-smith-home-directory-verification.jpg)
+
+*Account creation and home-directory verification.*
+
+**Verification detail:** Bare `ls -ld` inspected the current project directory, not Brenda's home. The `ls -la /home/` listing supplied the relevant confirmation. The earlier UID/GID output predates account recreation; no post-recreation `id` output is shown.
+
+**Operational lesson:** Account deletion and recreation is suitable only for this disposable exercise. For an established account, preserve its identity and create or populate the home directory with appropriate ownership instead. Password setup and login remain unverified.
+
 [← Linux portfolio index](../../README.md)
