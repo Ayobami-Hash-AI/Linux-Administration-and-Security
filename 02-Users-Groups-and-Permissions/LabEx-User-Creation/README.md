@@ -391,4 +391,27 @@ This confirms the account is listed in both its own group and `developers`. The 
 
 **Access implications:** Existing sessions may need a fresh login to pick up the new membership. Membership alone does not demonstrate successful project access; directory traversal and file permissions also apply. No login or project-access test is shown in this step.
 
+## Preserving a departing employee's account while locking its password
+
+The LabEx task required locking `j.doe` while retaining the account and its files for an audit.
+
+```bash
+sudo usermod -L j.doe
+sudo grep -w j.doe /etc/shadow
+```
+
+The displayed shadow entry has `!` in its password field, confirming that password authentication is locked. No password hash is displayed. The commands shown do not delete the account or its files.
+
+![LabEx task requiring j.doe account locking and file preservation](screenshots/labex-j-doe-account-lock-task.jpg)
+
+*Account-locking and evidence-retention requirement.*
+
+![Terminal showing usermod -L j.doe and a locked password field](screenshots/labex-j-doe-password-lock-verification.jpg)
+
+*Password lock verified in the account database.*
+
+**Verification scope:** Password locking alone does not establish that every login method is disabled or that existing sessions have ended. No login attempt, SSH-key revocation, session termination, or file-integrity check is shown. For future status checks without displaying shadow records, use `sudo passwd -S j.doe`.
+
+The final `sudo useradd b.smith` text is at the prompt with the cursor still present; its execution is not evidenced by this screenshot.
+
 [← Linux portfolio index](../../README.md)
