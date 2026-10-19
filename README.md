@@ -14,6 +14,7 @@ A growing portfolio of hands-on Linux exercises documenting **commands, observed
 | 002 | [Linux User Account Lifecycle & Access Management](02-Users-Groups-and-Permissions/LabEx-User-Creation/README.md) | LabEx | Account lifecycle, sudo access, password locking, and deletion documented with screenshots |
 | 003 | [Project Directory Structure](01-Files-and-Directories/LabEx-The-Digital-Architect/README.md) | LabEx | Directory creation, naming correction, and final listing verified with screenshots |
 | 004 | [Application Log Filtering & Error Reporting](03-Log-Analysis/LabEx-Application-Error-Investigation/README.md) | LabEx | `grep` and report redirection evidenced; report-content verification pending |
+| 005 | [Owner-Only Project File](02-Users-Groups-and-Permissions/LabEx-Secure-Project-File/README.md) | LabEx | Empty file and corrected mode `600` verified with screenshots |
 
 **Lab 003 covers:** `cd`, `mkdir`, `rmdir`, `ls -F`, and exact directory naming.
 
