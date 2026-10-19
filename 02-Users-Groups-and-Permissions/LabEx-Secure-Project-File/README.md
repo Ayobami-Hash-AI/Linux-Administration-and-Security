@@ -85,4 +85,37 @@ ls -lR ~/project/phoenix_project
 
 **Evidence:** Two user-shared screenshots show the ownership task and terminal result. Their image files were not available for upload in this update; the observed command and result are recorded here without claiming recursive verification.
 
+## Main directory permissions and recursive-change side effect
+
+The next recursive listing confirmed that the project directory, `docs`, `src`, `project_keys.txt`, and `docs/guidelines.md` were owned by `dev_lead:developers`. This supplies the previously missing nested ownership evidence.
+
+I then ran:
+
+```bash
+sudo chmod -R 750 phoenix_project
+ls -lR
+ls -l
+```
+
+The final listing confirms `phoenix_project` has mode `750` (`drwxr-x---`): owner full access, group list/traverse access, and no access for others.
+
+**Observed side effect:** The recursive option also applied `750` to the regular files `project_keys.txt` and `docs/guidelines.md`. The key file now shows `-rwxr-x---`, granting group read/execute access and overriding its earlier owner-only `600` protection. This does not preserve the confidentiality requirement.
+
+## Corrective commands to perform
+
+Only the main directory needed the new mode. For that task, recursion is unnecessary:
+
+```bash
+sudo chmod 750 ~/project/phoenix_project
+sudo chmod 600 ~/project/phoenix_project/project_keys.txt
+sudo chmod 640 ~/project/phoenix_project/docs/guidelines.md
+ls -lR ~/project/phoenix_project
+```
+
+The `640` documentation mode grants the owner read/write and the project group read access without execute permission. These are recommended corrections, not yet evidenced as executed. The key file should return to `-rw-------`, while the main directory remains `drwxr-x---`.
+
+**Lesson learned:** Apply recursive permission changes only when the same policy is appropriate for every affected object. Directories need execute permission for traversal; ordinary text files typically do not. Special confidential files require their own access policy.
+
+**Evidence:** User-shared task and recursive terminal listings. Screenshot binaries were not available for upload in this update.
+
 [← Linux portfolio index](../../README.md)
