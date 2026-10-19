@@ -338,6 +338,30 @@ The final listing confirms `/home/b.smith` exists, is owned by `b.smith:b.smith`
 
 **Verification detail:** Bare `ls -ld` inspected the current project directory, not Brenda's home. The `ls -la /home/` listing supplied the relevant confirmation. The earlier UID/GID output predates account recreation; no post-recreation `id` output is shown.
 
-**Operational lesson:** Account deletion and recreation is suitable only for this disposable exercise. For an established account, preserve its identity and create or populate the home directory with appropriate ownership instead. Password setup and login remain unverified.
+**Operational lesson:** Account deletion and recreation is suitable only for this disposable exercise. For an established account, preserve its identity and create or populate the home directory with appropriate ownership instead. Password setup is verified in the next section; login remains unverified.
+
+## Setting Brenda's initial password
+
+I set an initial password for the recreated developer account:
+
+```bash
+sudo passwd b.smith
+```
+
+The terminal prompted for the new password twice and returned:
+
+```text
+passwd: password updated successfully
+```
+
+This confirms a successful password update. Password input was not echoed and no password value or hash is shown in the evidence. A successful login and any password-aging policy have not yet been demonstrated.
+
+![LabEx task to set an initial password for b.smith](screenshots/labex-b-smith-password-task.jpg)
+
+*Initial-password requirement.*
+
+![Terminal confirming successful password update for b.smith](screenshots/labex-b-smith-password-update-verification.jpg)
+
+*Successful password update without exposing credentials.*
 
 [← Linux portfolio index](../../README.md)
