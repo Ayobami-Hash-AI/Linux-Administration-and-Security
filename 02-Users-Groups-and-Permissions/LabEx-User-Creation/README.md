@@ -277,4 +277,41 @@ These checks confirm that Bob's local account entry is absent from `/etc/passwd`
 
 Verify Joker's configured home directory exists, inspect sudo policy with non-sensitive commands, and practise least-privilege group configuration. Capture additional checks before claiming full account offboarding or completion of the entire LabEx course.
 
+## Developer onboarding — Brenda Smith
+
+In a subsequent LabEx onboarding exercise, I created `b.smith` following the required `first_initial.last_name` convention and verified the account record and identity.
+
+```bash
+sudo useradd b.smith
+grep -w b.smith /etc/passwd
+id b.smith
+```
+
+Observed account record:
+
+```text
+b.smith:x:5002:5004::/home/b.smith:/bin/sh
+```
+
+Observed identity:
+
+```text
+uid=5002(b.smith) gid=5004(b.smith) groups=5004(b.smith)
+```
+
+| Property | Verified value |
+|---|---|
+| Username | `b.smith` |
+| UID | `5002` |
+| Primary GID | `5004` |
+| Listed groups | `b.smith` |
+| Configured home path | `/home/b.smith` |
+| Configured shell | `/bin/sh` |
+
+**Verification limits:** The account record establishes a configured home path, not an existing directory. The command did not explicitly request home-directory creation with `-m`; creation depends on system defaults. No password configuration, successful login, or membership in `developers` is shown. This step completes account creation and identity verification only.
+
+**Command refinement:** The unescaped dot in the observed `grep` pattern is a regular-expression wildcard. For a more precise follow-up lookup, use `getent passwd b.smith` or `grep -F 'b.smith:' /etc/passwd`. These alternatives are suggested, not shown as executed.
+
+**Evidence:** User-shared LabEx onboarding task and terminal screenshot. Screenshot binaries were not available for upload in this update.
+
 [← Linux portfolio index](../../README.md)
