@@ -56,4 +56,33 @@ The leading `-` identifies a regular file. The following nine characters describ
 
 For creating a new sensitive file with restrictive permissions from the outset, a shell can use `umask 077` before creation. This is a suggested improvement, not a command shown as performed.
 
+## Assigning project ownership
+
+I changed the owner and group of the project directory and its contents recursively:
+
+```bash
+sudo chown -R dev_lead:developers phoenix_project
+ls -l
+```
+
+The screenshot shows this command run from `~/project`, followed by a directory entry owned by `dev_lead` and group `developers` with mode `drwxrwxr-x` (`775`).
+
+| Component | Meaning |
+|---|---|
+| `sudo` | Run with elevated privileges |
+| `chown` | Change ownership |
+| `-R` | Apply recursively to the directory tree |
+| `dev_lead:developers` | Set user owner and group owner together |
+| `phoenix_project` | Target relative to the current directory |
+
+The command shows no visible errors. The listing directly confirms the top-level directory ownership; it does not list every nested file. Recursive verification remains to be captured:
+
+```bash
+ls -lR ~/project/phoenix_project
+```
+
+**Access-control implication:** Ownership and mode bits serve different purposes. `chown` changes who owns the resources; `chmod` controls their permission bits. The previously evidenced `600` key file would grant ordinary owner read/write access to its new owner after a successful ownership transfer; no new listing of that file is shown here.
+
+**Evidence:** Two user-shared screenshots show the ownership task and terminal result. Their image files were not available for upload in this update; the observed command and result are recorded here without claiming recursive verification.
+
 [← Linux portfolio index](../../README.md)
