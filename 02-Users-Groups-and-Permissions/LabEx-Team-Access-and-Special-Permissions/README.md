@@ -2,7 +2,7 @@
 
 **Platform:** LabEx  
 **Date:** October 30, 2026  
-**Status:** In progress — current identity, Jack's account, and home-directory ownership and permissions verified.
+**Status:** In progress — current identity, practice-account creation, home permissions, and supplementary group memberships verified.
 
 ## Objective
 
@@ -28,7 +28,7 @@ All work is scoped to the lab environment. The exercise specifies leaving the de
 | Stage | Evidence |
 |---|---|
 | Lab introduction | Captured |
-| User and group configuration | Account and primary group verified; supplementary-group work pending |
+| User and group configuration | Account, primary group, and supplementary memberships verified; session refresh pending |
 | File permissions and password-lock inspection | Pending |
 | Default permissions and special directory permissions | Pending |
 
@@ -82,5 +82,45 @@ A UID and a GID belong to separate namespaces: Jack's UID `5002` matching the nu
 *Executed commands and observed verification results.*
 
 **Verification scope:** No password configuration, login attempt, supplementary-group assignment for Jack, or file-access test is shown yet. A follow-up `getent passwd jack` can confirm the configured shell without exposing authentication data.
+
+## Managing supplementary groups
+
+I created a shared team group, appended supplementary memberships, and queried both accounts.
+
+```bash
+sudo groupadd developers
+sudo usermod -aG developers,sudo jack
+sudo usermod -aG developers labex
+groups jack
+groups labex
+```
+
+Observed output:
+
+```text
+jack : jack sudo developers
+labex : labex sudo ssl-cert public developers
+```
+
+| Account | Verified group list |
+|---|---|
+| `jack` | `jack`, `sudo`, `developers` |
+| `labex` | `labex`, `sudo`, `ssl-cert`, `public`, `developers` |
+
+The `-G` option specifies supplementary groups, and `-a` appends them rather than replacing existing supplementary memberships. The output confirms that LabEx's previously listed groups were retained and `developers` was added.
+
+![LabEx task explaining supplementary groups and creation of developers](screenshots/labex-supplementary-groups-task.jpg)
+
+*Shared-group creation and membership requirements.*
+
+![LabEx instructions for adding jack and labex to supplementary groups](screenshots/labex-team-group-membership-instructions.jpg)
+
+*Membership commands and account queries.*
+
+![Terminal confirming jack and labex supplementary group memberships](screenshots/labex-jack-labex-group-membership-verification.jpg)
+
+*Group memberships verified through account queries.*
+
+**Session and privilege scope:** `groups labex` queries the account's configured memberships; it does not prove the current shell has acquired the new group identity. Session refresh and shared-resource access tests remain pending. Jack's `sudo` membership is evidenced, but successful privileged execution as Jack is not shown; authorization also depends on sudoers policy.
 
 [← Linux portfolio index](../../README.md)
