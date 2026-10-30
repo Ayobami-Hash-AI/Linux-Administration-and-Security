@@ -16,6 +16,8 @@ A growing portfolio of hands-on Linux exercises documenting **commands, observed
 | 004 | [Application Log Filtering & Error Reporting](03-Log-Analysis/LabEx-Application-Error-Investigation/README.md) | LabEx | `grep` and report redirection evidenced; report-content verification pending |
 | 005 | [Owner-Only Project File](02-Users-Groups-and-Permissions/LabEx-Secure-Project-File/README.md) | LabEx | Empty file and corrected mode `600` verified with screenshots |
 
+| 006 | [Team Access & Special Permissions](02-Users-Groups-and-Permissions/LabEx-Team-Access-and-Special-Permissions/README.md) | LabEx | In progress: introduction uploaded; practical evidence pending |
+
 **Lab 003 covers:** `cd`, `mkdir`, `rmdir`, `ls -F`, and exact directory naming.
 
 **Lab 002 covers:** Account creation, password configuration, home-path and shell changes, sudo-group membership, login testing, password locking/unlocking, and verified deletion.
