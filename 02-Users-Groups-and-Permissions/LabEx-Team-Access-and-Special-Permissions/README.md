@@ -2,7 +2,7 @@
 
 **Platform:** LabEx  
 **Date:** October 30, 2026  
-**Status:** In progress — current identity, practice-account creation, home permissions, and supplementary group memberships verified.
+**Status:** In progress — current identity, practice-account creation, home permissions, supplementary group memberships, and report ownership/mode verified.
 
 ## Objective
 
@@ -29,7 +29,7 @@ All work is scoped to the lab environment. The exercise specifies leaving the de
 |---|---|
 | Lab introduction | Captured |
 | User and group configuration | Account, primary group, and supplementary memberships verified; session refresh pending |
-| File permissions and password-lock inspection | Pending |
+| File permissions and password-lock inspection | Report ownership and mode 640 verified; password-lock inspection pending |
 | Default permissions and special directory permissions | Pending |
 
 Subsequent sections will record the commands performed, observed output, and access checks as the lab progresses.
@@ -122,5 +122,47 @@ The `-G` option specifies supplementary groups, and `-a` appends them rather tha
 *Group memberships verified through account queries.*
 
 **Session and privilege scope:** `groups labex` queries the account's configured memberships; it does not prove the current shell has acquired the new group identity. Session refresh and shared-resource access tests remain pending. Jack's `sudo` membership is evidenced, but successful privileged execution as Jack is not shown; authorization also depends on sudoers policy.
+
+## Controlling file ownership and permissions
+
+I assigned the team report to Jack and the shared development group, applied mode `640`, and verified the metadata with both `ls` and `stat`.
+
+```bash
+sudo chown jack:developers /home/labex/project/secure-report.txt
+sudo chmod 640 /home/labex/project/secure-report.txt
+ls -l /home/labex/project/secure-report.txt
+stat -c 'owner=%U group=%G mode=%a' /home/labex/project/secure-report.txt
+```
+
+Observed listing:
+
+```text
+-rw-r----- 1 jack developers 0 Oct 30 17:06 /home/labex/project/secure-report.txt
+owner=jack group=developers mode=640
+```
+
+| Identity | Mode bits | File permissions |
+|---|---|---|
+| Owner `jack` | `rw-` (`6`) | Read and write |
+| Group `developers` | `r--` (`4`) | Read only |
+| Others | `---` (`0`) | No access through ordinary mode bits |
+
+The listing confirms a regular, empty file owned by `jack:developers`. No execute bits are set. The `user:group` form of `chown` sets both ownership fields in one command.
+
+**Troubleshooting:** The first `stat` command targeted `/home/labex/project/secure.txt`, which did not exist. Correcting the path to `secure-report.txt` returned the expected ownership and mode. The error reflected a filename mismatch, not a failed permission change.
+
+![LabEx task for assigning team-report ownership](screenshots/labex-secure-report-ownership-task.jpg)
+
+*Report creation and ownership requirements.*
+
+![LabEx instructions explaining mode 640](screenshots/labex-secure-report-mode-640-instructions.jpg)
+
+*Owner read/write, group read, and no permissions for others.*
+
+![Terminal verifying secure-report.txt ownership and mode 640 after correcting a stat filename](screenshots/labex-secure-report-ownership-permissions-verification.jpg)
+
+*Ownership and mode verified independently with a long listing and formatted metadata.*
+
+**Evidence scope:** The task requests `touch`, but its execution is not visible in the terminal screenshot. The final listing verifies that the empty file exists. These are metadata checks; reads and writes as Jack, another developer, or an unrelated user have not been demonstrated. Effective access also depends on parent-directory traversal and any applicable ACLs or other controls.
 
 [← Linux portfolio index](../../README.md)
