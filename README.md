@@ -15,7 +15,7 @@ A growing portfolio of hands-on Linux exercises documenting **commands, observed
 | 003 | [Project Directory Structure](01-Files-and-Directories/LabEx-The-Digital-Architect/README.md) | LabEx | Directory creation, naming correction, and final listing verified with screenshots |
 | 004 | [Application Log Filtering & Error Reporting](03-Log-Analysis/LabEx-Application-Error-Investigation/README.md) | LabEx | `grep` and report redirection evidenced; report-content verification pending |
 | 005 | [Owner-Only Project File](02-Users-Groups-and-Permissions/LabEx-Secure-Project-File/README.md) | LabEx | Empty file and corrected mode `600` verified with screenshots |
-| 006 | [Team Access & Special Permissions](02-Users-Groups-and-Permissions/LabEx-Team-Access-and-Special-Permissions/README.md) | LabEx | In progress: introduction uploaded; practical evidence pending |
+| 006 | [Team Access & Special Permissions](02-Users-Groups-and-Permissions/LabEx-Team-Access-and-Special-Permissions/README.md) | LabEx | In progress: practice account, primary group, and home-directory permissions verified |
 
 **Lab 003 covers:** `cd`, `mkdir`, `rmdir`, `ls -F`, and exact directory naming.
 
