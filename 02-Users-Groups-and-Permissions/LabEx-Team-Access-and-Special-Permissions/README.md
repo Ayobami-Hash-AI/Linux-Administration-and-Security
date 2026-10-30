@@ -2,7 +2,7 @@
 
 **Platform:** LabEx  
 **Date:** October 30, 2026  
-**Status:** In progress — current identity, practice-account creation, home permissions, supplementary group memberships, report ownership/mode, and contractor password lock/unlock verified.
+**Status:** In progress — current identity, practice-account creation, home permissions, supplementary group memberships, report ownership/mode, contractor password lock/unlock, and umask creation modes verified.
 
 ## Objective
 
@@ -30,7 +30,7 @@ All work is scoped to the lab environment. The exercise specifies leaving the de
 | Lab introduction | Captured |
 | User and group configuration | Account, primary group, and supplementary memberships verified; session refresh pending |
 | File permissions and password-lock inspection | Report ownership/mode 640 and password lock/unlock transitions verified |
-| Default permissions and special directory permissions | Pending |
+| Default permissions and special directory permissions | umask 027 file/directory modes verified; sticky bit and setgid pending |
 
 Subsequent sections will record the commands performed, observed output, and access checks as the lab progresses.
 
@@ -701,5 +701,47 @@ The listing confirms a regular, empty file owned by `jack:developers`. No execut
 **Evidence scope:** The task requests `touch`, but its execution is not visible in the terminal screenshot. The final listing verifies that the empty file exists. These are metadata checks; reads and writes as Jack, another developer, or an unrelated user have not been demonstrated. Effective access also depends on parent-directory traversal and any applicable ACLs or other controls.
 
  prefix alone does not prove an account can log in.
+
+## Controlling default permissions with umask
+
+I inspected the current mask, saved it in a shell variable, temporarily applied `027`, and checked the modes of a newly created file and directory.
+
+```bash
+ls
+umask
+original_umask=$(umask)
+umask 027
+mkdir -p /home/labex/project/umask-demo
+touch /home/labex/project/umask-demo/private-note.txt
+mkdir /home/labex/project/umask-demo/private-dir
+stat -c "%a %n" /home/labex/project/umask-demo/private-note.txt /home/labex/project/umask-demo/private-dir
+umask "$original_umask"
+```
+
+The initial `umask` output was `002`. The metadata check returned:
+
+```text
+640 /home/labex/project/umask-demo/private-note.txt
+750 /home/labex/project/umask-demo/private-dir
+```
+
+| Object | Usual requested base mode | Mask | Observed mode | Result |
+|---|---|---|---|---|
+| Regular file | `666` | `027` | `640` | Owner read/write; group read; others none |
+| Directory | `777` | `027` | `750` | Owner full permissions; group list/traverse; others none |
+
+A umask removes permission bits from the mode requested at creation: `requested_mode & ~umask`. It does not grant permissions or change existing objects. Regular files created by `touch` normally start without execute bits, which explains the difference from directories. Creation modes can also be affected by default ACLs and application-specific requests; the displayed `stat` results establish the outcomes in this lab.
+
+`original_umask=$(umask)` captures the current mask. The final `umask "$original_umask"` command restores the saved value in the current shell and shows no error. A subsequent `umask` query is not displayed, so independent confirmation of restoration remains a follow-up check.
+
+![LabEx section heading for controlling default permissions with umask](screenshots/labex-umask-default-permissions-task.jpg)
+
+*Default-permission exercise.*
+
+![Terminal showing initial mask 002, temporary mask 027, file mode 640, directory mode 750, and restoration command](screenshots/labex-umask-027-file-directory-verification.jpg)
+
+*Creation modes verified with stat.*
+
+**Security relevance:** A restrictive default mask reduces unintended access when new files and directories are created. This experiment demonstrates default mode selection; access attempts as other users are not shown.
 
 [← Linux portfolio index](../../README.md)
